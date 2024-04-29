@@ -13,15 +13,51 @@
 <h1 align="center"><font color="#FF00FF"><i>
 <span style="background-color: #FFFF00">WELCOME TO MY WEBPAGE</span></i></font></h1>
 <h1 align="center">&nbsp;</h1>
-<h1 align="center"><i><font size="7">HELLO WORLD!</font></i></h1>
+<h1 align="center"><i><font size="5">Bing Bang Bong</font></i></h1>
 <p align="center">
-<!--webbot bot="Navigation" S-Type="sequence" S-Orientation="horizontal" S-Rendering="graphics" S-Theme="bars" B-Include-Home="TRUE" B-Include-Up="FALSE" U-Page="sid:1001" startspan --><img src="_derived/demo.htm_cmp_bars000_hbtn_p.gif" width="140" height="40" border="0" alt="demo.htm" align="middle"><!--webbot bot="Navigation" i-checksum="50887" endspan --></p>
+    <script src="https://unpkg.com/hydra-synth"></script>
+    <script>
+          // create a new hydra-synth instance
+          var hydra = new Hydra({ detectAudio: false })
+          shape(200,0.5,1.5)
+        .scale(0.5,0.5)
+        .color([0.5,2].smooth(1),0.3,0)
+        .repeat(2,2)
+        .modulateScale(osc(3,0.5),-0.6)
+        .add(o0,0.5)
+        .scale(0.9)
+        .out()
+        </script>
 <hr>
 <p align="center"><b><font face="Times New Roman" size="7">
 <marquee scrolldelay="10" scrollamount="20" behavior="alternate" bgcolor="#00FFCC">-YOyo-</marquee></font></b></p>
 <p>&nbsp;</p>
 <p>Contact erenerken@hotmail.com.tr</p>
+<script>
+    // create a new hydra-synth instance
+    var hydra = new Hydra({ detectAudio: false })
+    shape(1,1)
+    .mult(voronoi(1000,2)
+    .blend(o0).luma())
+    .add(shape(3,0.125)
+    .rotate(1,1).mult(voronoi(1000,1).luma())
+    .rotate(1.5)).scrollX([0.1,-0.0625,0.005,0.00001],0)
+    .scrollY([0.1,-0.0625,0.005,0.00001],0)
+    .out()
+  </script>
 
+<script>
+    // create a new hydra-synth instance
+    var hydra = new Hydra({ detectAudio: false })
+
+    osc(15, 0.01, 0.1).mult(osc(1, -0.1).modulate(osc(2).rotate(4,1), 20))
+.color(0,2.4,5)
+.saturate(0.4)
+.luma(1,0.1, (6, ()=> 1 + a.fft[2]))
+.scale(0.7, ()=> 0.7 + a.fft[12])
+.diff(o0)// o0
+.out(o0)// o1
+  </script>
 </body>
 
 </html>
