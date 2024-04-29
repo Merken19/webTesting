@@ -3,17 +3,17 @@
 <head>
 <meta http-equiv="Content-Language" content="en-ca">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>HELLO</title>
+<title>buy ritalin</title>
 </head>
 
-<body>
+<body style="background-color:black;"></body>
 
 <h1 align="center"><font color="#FF00FF"><i>
-<span style="background-color: #FFFF00">HELLO</span></i></font></h1>
+<span >HELLO</span></i></font></h1>
 <h1 align="center"><font color="#FF00FF"><i>
-<span style="background-color: #FFFF00">WELCOME TO MY WEBPAGE</span></i></font></h1>
+<span >WELCOME TO MY WEBPAGE</span></i></font></h1>
 <h1 align="center">&nbsp;</h1>
-<h1 align="center"><i><font size="5">Bing Bang Bong</font></i></h1>
+<h1 align="center"><i><font size="5">Bing Bang Bong<font color="#FF00FF"></i></h1>
 <p align="center">
     <script src="https://unpkg.com/hydra-synth"></script>
     <script>
@@ -50,14 +50,29 @@
     // create a new hydra-synth instance
     var hydra = new Hydra({ detectAudio: false })
 
-    osc(15, 0.01, 0.1).mult(osc(1, -0.1).modulate(osc(2).rotate(4,1), 20))
-.color(0,2.4,5)
-.saturate(0.4)
-.luma(1,0.1, (6, ()=> 1 + a.fft[2]))
-.scale(0.7, ()=> 0.7 + a.fft[12])
-.diff(o0)// o0
-.out(o0)// o1
+//     osc(15, 0.01, 0.1).mult(osc(1, -0.1).modulate(osc(2).rotate(4,1), 20))
+// .color(0,2.4,5)
+// .saturate(0.4)
+// .luma(1,0.1, (6, ()=> 1 + a.fft[2]))
+// .scale(0.7, ()=> 0.7 + a.fft[12])
+// .diff(o0)// o0
+// .out(o0)// o1
+osc(60,-0.015,0.3).diff(osc(60,0.08).rotate(Math.PI/2))
+	.modulateScale(noise(3.5,0.25).modulateScale(osc(15).rotate(()=>Math.sin(time/2))),0.6)
+	.color(1,0.5,0.4).contrast(1.4)
+	.add(src(o0).modulate(o0,.04),.6)
+	.invert().brightness(0.1).contrast(1.2)
+	.modulateScale(osc(2),-0.2)
+  .out()
   </script>
+
+<script>
+    // create a new hydra-synth instance
+    var hydra = new Hydra({ detectAudio: false })
+    s0.initCam()
+    src(s0).color(-1, Math.random()*2, 1).colorama().out()
+  </script>
+
 </body>
 
 </html>
