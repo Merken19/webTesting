@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Visualizer Example</title>
+</head>
+<body>
+    <div id="app" style="height: 100vh">
+        <canvas id="visualizerCanvas"></canvas>
+    </div>
+    <script type="module">
+        import butterchurn from 'https://cdn.esm.sh/butterchurn';
+        import butterchurnPresets from 'https://cdn.esm.sh/butterchurn-presets';
+
+        const canvas = document.getElementById('visualizerCanvas');
+        const audioContext = new AudioContext();
+
+        const visualizer = butterchurn.createVisualizer(audioContext, canvas, {
+            width: canvas.width,
+            height: canvas.height
+        });
+
+        // Assume audioNode is connected to some audio source
+        // Example: const audioNode = audioContext.createOscillator();
+        // audioNode.connect(audioContext.destination);
+        // audioNode.start();
+
+        const presets = butterchurnPresets.getPresets();
+        const preset = presets['Flexi, martin + geiss - dedicated to the sherwin maxawow'];
+
+        visualizer.loadPreset(preset, 0.0);
+
+        visualizer.setRendererSize(800, 600);
+
+        function renderFrame() {
+            visualizer.render();
+            requestAnimationFrame(renderFrame);
+        }
+
+        renderFrame();
+    </script>
+</body>
+</html>
