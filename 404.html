@@ -1,43 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Visualizer Example</title>
-</head>
-<body>
-    <div id="app" style="height: 100vh">
-        <canvas id="visualizerCanvas"></canvas>
-    </div>
-    <script type="module">
-        import butterchurn from 'https://cdn.esm.sh/butterchurn';
-        import butterchurnPresets from 'https://cdn.esm.sh/butterchurn-presets';
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>trippin?</title>
+  <meta name="description" content="acid">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        const canvas = document.getElementById('visualizerCanvas');
-        const audioContext = new AudioContext();
+  <!-- <script type="text/javascript" src="../dist/butterchurn.js"></script> -->
+  <script type="text/javascript" src="https://unpkg.com/lodash"></script>
+  <script type="text/javascript" src="https://unpkg.com/butterchurn"></script>
+  <script type="text/javascript" src="https://unpkg.com/butterchurn-presets"></script>
+  <script type="text/javascript" src="https://unpkg.com/butterchurn-presets/lib/butterchurnPresetsExtra.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
-        const visualizer = butterchurn.createVisualizer(audioContext, canvas, {
-            width: canvas.width,
-            height: canvas.height
-        });
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-        // Assume audioNode is connected to some audio source
-        // Example: const audioNode = audioContext.createOscillator();
-        // audioNode.connect(audioContext.destination);
-        // audioNode.start();
+    #canvas {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/normalize.css/normalize.css" />
 
-        const presets = butterchurnPresets.getPresets();
-        const preset = presets['Flexi, martin + geiss - dedicated to the sherwin maxawow'];
+  <script>
+    $(function() {
+      var visualizer = null;
+      var rendering = false;
+      var audioContext = null;
+      var sourceNode = null;
+      var delayedAudible = null;
+      var cycleInterval = null;
+      var gainNode = null;
+      var presets = {};
+      var presetKeys = [];
+      var presetIndex = 0; // Fixed preset index
+      var canvas = document.getElementById('canvas');
+      var micSensitivity = 1.5; // Adjustable sensitivity variable
 
-        visualizer.loadPreset(preset, 0.0);
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
 
-        visualizer.setRendererSize(800, 600);
+      window.addEventListener('resize', resizeCanvas);
 
-        function renderFrame() {
-            visualizer.render();
-            requestAnimationFrame(renderFrame);
+      function startRenderer() {
+        requestAnimationFrame(() => startRenderer());
+        visualizer.render();
+      }
+
+      function connectMicAudio(sourceNode, audioContext) {
+        audioContext.resume();
+
+        if (gainNode) {
+          gainNode.disconnect();
         }
 
-        renderFrame();
-    </script>
+        gainNode = audioContext.createGain();
+        gainNode.gain.value = micSensitivity; // Use the sensitivity variable
+        sourceNode.connect(gainNode);
+
+        visualizer.connectAudio(gainNode);
+        startRenderer();
+      }
+
+      function loadPreset(blendTime = 5.7) {
+        visualizer.loadPreset(presets[presetKeys[presetIndex]], blendTime);
+      }
+
+      function nextPreset() {
+        presetIndex = Math.floor(Math.random() * presetKeys.length);
+        loadPreset(2.7);
+      }
+
+      function restartCycleInterval() {
+        if (cycleInterval) {
+          clearInterval(cycleInterval);
+        }
+        cycleInterval = setInterval(nextPreset, 10000); // Change preset every 10 seconds
+      }
+
+      function initPlayer() {
+        audioContext = new AudioContext();
+
+        presets = {};
+        if (window.butterchurnPresets) {
+          Object.assign(presets, butterchurnPresets.getPresets());
+        }
+        if (window.butterchurnPresetsExtra) {
+          Object.assign(presets, butterchurnPresetsExtra.getPresets());
+        }
+        presets = _(presets).toPairs().sortBy(([k, v]) => k.toLowerCase()).fromPairs().value();
+        presetKeys = _.keys(presets);
+        presetIndex = Math.floor(Math.random() * presetKeys.length);
+
+        visualizer = butterchurn.default.createVisualizer(audioContext, canvas, {
+          width: window.innerWidth,
+          height: window.innerHeight,
+          pixelRatio: window.devicePixelRatio || 1,
+          textureRatio: 1,
+        });
+
+        resizeCanvas();
+        loadPreset(0);
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+          var micSourceNode = audioContext.createMediaStreamSource(stream);
+          connectMicAudio(micSourceNode, audioContext);
+        }).catch((err) => {
+          console.log('Error getting audio stream from getUserMedia', err);
+          // Fallback: Start the visualizer without audio input
+          startRenderer();
+        });
+
+        restartCycleInterval(); // Start the preset cycling
+      }
+
+      initPlayer();
+    });
+  </script>
+</head>
+<body>
+  <canvas id='canvas'></canvas>
 </body>
 </html>
