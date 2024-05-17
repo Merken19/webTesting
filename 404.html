@@ -108,21 +108,21 @@
 
         resizeCanvas();
         loadPreset(0);
+        startRenderer(); // Fallback: Start the visualizer without audio input
 
-        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {
           var micSourceNode = audioContext.createMediaStreamSource(stream);
           connectMicAudio(micSourceNode);
         }).catch((err) => {
           console.log('Error getting audio stream from getUserMedia', err);
-          startRenderer(); // Fallback: Start the visualizer without audio input
         });
 
         restartCycleInterval();
       }
+      initPlayer();
 
       document.body.addEventListener('click', function() {
         if (!audioContext) {
-          initPlayer();
         } else if (audioContext.state === 'suspended') {
           audioContext.resume();
         }
@@ -130,7 +130,7 @@
 
       document.body.addEventListener('touchend', function() {
         if (!audioContext) {
-          initPlayer();
+          // initPlayer();
         } else if (audioContext.state === 'suspended') {
           audioContext.resume();
         }
