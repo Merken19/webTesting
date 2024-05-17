@@ -70,7 +70,6 @@
         sourceNode.connect(gainNode);
 
         visualizer.connectAudio(gainNode);
-        startRenderer();
       }
 
       function loadPreset(blendTime = 3) {
@@ -86,7 +85,7 @@
         setInterval(nextPreset, 20000); // Change preset every 20 seconds
       }
 
-      function initPlayer() {
+      function initVisualizer() {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
         if (window.butterchurnPresets) {
@@ -108,32 +107,33 @@
 
         resizeCanvas();
         loadPreset(0);
-        startRenderer(); // Fallback: Start the visualizer without audio input
+        startRenderer(); // Start the visualizer without audio input
+        restartCycleInterval();
+      }
 
+      function requestMicAccess() {
         navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {
           var micSourceNode = audioContext.createMediaStreamSource(stream);
           connectMicAudio(micSourceNode);
         }).catch((err) => {
           console.log('Error getting audio stream from getUserMedia', err);
         });
-
-        restartCycleInterval();
       }
-      initPlayer();
+
+      initVisualizer(); // Initialize the visualizer and start rendering
 
       document.body.addEventListener('click', function() {
-        if (!audioContext) {
-        } else if (audioContext.state === 'suspended') {
+        if (audioContext && audioContext.state === 'suspended') {
           audioContext.resume();
         }
+        requestMicAccess();
       }, { once: true });
 
       document.body.addEventListener('touchend', function() {
-        if (!audioContext) {
-          // initPlayer();
-        } else if (audioContext.state === 'suspended') {
+        if (audioContext && audioContext.state === 'suspended') {
           audioContext.resume();
         }
+        requestMicAccess();
       }, { once: true });
     });
   </script>
