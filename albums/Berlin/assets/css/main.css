@@ -854,7 +854,8 @@ input, select, textarea {
 			top: 0;
 			width: 4em;
 			height: 4em;
-			background-image: url("images/close-small-alt.svg");
+			/* background-image: url("images/close-small-alt.svg"); */
+			background-image: url("images/arrow-small.svg");
 			background-repeat: no-repeat;
 			background-size: 32px 32px;
 			cursor: pointer;
@@ -1143,7 +1144,7 @@ input, select, textarea {
 				top: 0;
 				width: 4em;
 				height: 4em;
-				background-image: url("images/close.svg");
+				background-image: url("images/open.svg");
 				background-repeat: no-repeat;
 				background-size: 64px 64px;
 				cursor: pointer;
