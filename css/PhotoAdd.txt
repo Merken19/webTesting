@@ -1,3 +1,0 @@
-TO add photo go to main.css
-CTRL+F for .panel1 .photo
-or CTRL+F "add photo"
