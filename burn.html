@@ -37,7 +37,7 @@
             </style>
         
     <script src="js/leaflet_heat.min.js"></script>
-    <title>Burn the World</title>
+    <title>Burn the World TESTING</title>
     <link rel="icon" type="image/x-icon" href="../../assets/icons/icon.ico"> <!-- add icon -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -177,5 +177,8 @@
     
             heat_map_fff6cbca0299a49e204ca3d060d1962b.addTo(map_5d880d51f4b337046d994cd428ec93c9);
         
+            map_5d880d51f4b337046d994cd428ec93c9.on('zoom', function() {
+            heat_map_fff6cbca0299a49e204ca3d060d1962b.redraw();
+        });
 </script>
 </html>
