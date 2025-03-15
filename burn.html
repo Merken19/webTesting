@@ -121,6 +121,7 @@
                     crs: L.CRS.EPSG3857,
                     ...{
   "zoom": 3,
+  "touchZoom": false,
   "zoomControl": true,
   "preferCanvas": false,
 }
@@ -177,8 +178,5 @@
     
             heat_map_fff6cbca0299a49e204ca3d060d1962b.addTo(map_5d880d51f4b337046d994cd428ec93c9);
         
-            map_5d880d51f4b337046d994cd428ec93c9.on('zoom', function() {
-            heat_map_fff6cbca0299a49e204ca3d060d1962b.redraw();
-        });
 </script>
 </html>
