@@ -38,7 +38,7 @@
             </style>
         
     <script src="js/leaflet_heat.min.js"></script>
-    <title>Burn the World TESTING</title>
+    <title>Burn the World</title>
     <link rel="icon" type="image/x-icon" href="../../assets/icons/icon.ico"> <!-- add icon -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -185,7 +185,7 @@
             var initialZoom, initialScale;
 
             hammer.on('pinchstart', function(e) {
-                initialZoom = map.getZoom();
+                initialZoom = map_5d880d51f4b337046d994cd428ec93c9.getZoom();
                 initialScale = e.scale;
             });
 
@@ -193,7 +193,7 @@
                 var scaleFactor = e.scale / initialScale;
                 // Calculate new zoom level; this example approximates doubling the scale for one zoom level
                 var newZoom = initialZoom + Math.log(scaleFactor) / Math.log(2);
-                map.setZoom(newZoom);
+                map_5d880d51f4b337046d994cd428ec93c9.setZoom(newZoom);
             });
         
 </script>
