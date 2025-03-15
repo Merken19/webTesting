@@ -15,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <script src="js/hammer.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
@@ -37,7 +38,7 @@
             </style>
         
     <script src="js/leaflet_heat.min.js"></script>
-    <title>Burn the World FFF</title>
+    <title>Burn the World TESTING</title>
     <link rel="icon" type="image/x-icon" href="../../assets/icons/icon.ico"> <!-- add icon -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -178,23 +179,22 @@
     
             heat_map_fff6cbca0299a49e204ca3d060d1962b.addTo(map_5d880d51f4b337046d994cd428ec93c9);
 
-            // During the zoom animation, apply a CSS transform to the heatmap canvas
-map_5d880d51f4b337046d994cd428ec93c9.on('zoomanim', function(e) {
-  // Assuming the heatmap layer creates a canvas element you can select.
-  const heatCanvas = document.querySelector('.leaflet-heatmap-layer canvas');
-  if (heatCanvas) {
-    heatCanvas.style.transform = 'scale(' + e.scale + ')';
-    // You might need to adjust transform-origin/position depending on your layout.
-  }
-});
+            var hammer = new Hammer(document.getElementById('map_5d880d51f4b337046d994cd428ec93c9'));
+            hammer.get('pinch').set({ enable: true });
 
-// Once the zoom animation is complete, clear the transform and let the layer update.
-map_5d880d51f4b337046d994cd428ec93c9.on('zoomend', function(e) {
-  const heatCanvas = document.querySelector('.leaflet-heatmap-layer canvas');
-  if (heatCanvas) {
-    heatCanvas.style.transform = '';
-  }
-});
+            var initialZoom, initialScale;
+
+            hammer.on('pinchstart', function(e) {
+                initialZoom = map.getZoom();
+                initialScale = e.scale;
+            });
+
+            hammer.on('pinchend', function(e) {
+                var scaleFactor = e.scale / initialScale;
+                // Calculate new zoom level; this example approximates doubling the scale for one zoom level
+                var newZoom = initialZoom + Math.log(scaleFactor) / Math.log(2);
+                map.setZoom(newZoom);
+            });
         
 </script>
 </html>
